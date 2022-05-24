@@ -3,7 +3,7 @@
   <div class='row'>
     <div class='col-5 mx-auto'>
       <h3>Update product</h3><hr>
-      <form method='post' action='{{url_for("update_product",pid=datas.pid)}}'>
+      <form method='post' action='{{url_for("update_product_view",pid=datas.pid)}}'>
         <div class='form-group'>
             <label>Prodct Name</label>
             <input type='text' name='pname' value='{{datas.name}}' required class='form-control'>

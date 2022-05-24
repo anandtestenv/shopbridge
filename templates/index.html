@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block body %}
   <h3 class='text-center text-muted mb-3'>ShopBridge - Admin</h3>
-  <p class='text-right'><a href='{{url_for("add_product")}}' class='btn btn-success '>+Add Product</a></p>
+  <p class='text-right'><a href='{{url_for("add_product_view")}}' class='btn btn-success '>+Add Product</a></p>
   <table class='table table-bordered'>
     <thead>
       <th>SNo.</th>
@@ -19,8 +19,8 @@
           <td>{{prod.description}}</td>
           <td>{{prod.price}}</td>
           <td>{{prod.quantity}}</td>
-          <td><a href='{{url_for("update_product",pid=prod.pid)}}' class='btn btn-primary'>Edit</a></td>
-          <td><a href='{{url_for("delete_product",pid=prod.pid)}}' class='btn btn-danger' onclick='return confirm("Are You Sure")'>Delete</a></td>
+          <td><a href='{{url_for("update_product_view",pid=prod.pid)}}' class='btn btn-primary'>Edit</a></td>
+          <td><a href='{{url_for("delete_product_view",pid=prod.pid)}}' class='btn btn-danger' onclick='return confirm("Are You Sure")'>Delete</a></td>
         </tr>
       {%endfor%}
     </tbody>

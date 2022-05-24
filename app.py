@@ -1,6 +1,8 @@
 from flask import Flask,render_template,request,jsonify,request,redirect,url_for,flash
 import sqlite3 as sql
 from CustomException import NonNumericException
+
+from model import *
 app = Flask(__name__)
 
 
@@ -14,11 +16,11 @@ def index():
         cur.execute("select * from products")
         data=cur.fetchall()
         return render_template("index.html",prods=data)
-    except:
-        return "Something went wrong"
+    except Exception as e:
+        return "Something went wrong: "+str(e)
     
 @app.route("/add_product",methods=['POST','GET'])
-def add_product():
+def add_product_view():
 
     if request.method=='POST':
         try:
@@ -45,7 +47,7 @@ def add_product():
     return render_template("add_product.html")
 
 @app.route("/update_product/<string:pid>",methods=['POST','GET'])
-def update_product(pid):
+def update_product_view(pid):
     try:
         if request.method=='POST':
             pname=request.form['pname']
@@ -66,8 +68,9 @@ def update_product(pid):
         return render_template("update_product.html",datas=data)
     except Exception as e:
             return "Something went wrong "+(str(e))
+
 @app.route("/delete_product/<string:pid>",methods=['GET'])
-def delete_product(pid):
+def delete_product_view(pid):
     try:
         con=sql.connect("shopbridge.db")
         cur=con.cursor()
@@ -76,7 +79,38 @@ def delete_product(pid):
         flash('Product Deleted','warning')
         return redirect(url_for("index"))
     except Exception as e:
-        return "Something went wrong "+(str(e))    
+        return "Something went wrong "+(str(e))  
+        
+         
+
+# API
+
+
+@app.route("/api/products",methods = ['GET'])
+def get_product_api():
+    
+    return jsonify(get_products())
+
+@app.route("/api/product/add",methods=['POST','GET'])
+def add_product_api():
+    prod = request.get_json()
+    return jsonify(create_product(prod))
+
+@app.route("/api/product/<string:pid>",methods=['POST','GET'])
+def get_product_byid(pid):
+         
+    return jsonify(get_product_by_id(pid))
+
+@app.route("/api/product/update/",methods=['POST','GET'])
+def update_product_api():
+    product = request.get_json()
+    return jsonify(update_product(product))
+
+
+@app.route("/api/product/delete/<string:pid>",methods=['GET'])
+def delete_product_api(pid):
+
+    return jsonify(delete_product(pid))         
     
 if __name__=='__main__':
     app.secret_key='admin123'
